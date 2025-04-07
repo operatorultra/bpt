@@ -1,10 +1,11 @@
-// remix.config.js
-module.exports = {
-	serverModuleFormat: "esm", // Ensure ESM format
+/** @type {import('@remix-run/dev').AppConfig} */
+export default {
+	ignoredRouteFiles: ["**/.*"],
+	serverModuleFormat: "esm",
 	serverBuildPath: "build/server/index.js",
 	publicPath: "/build/",
 	future: {
-		unstable_cssModules: true, // Enable CSS modules support
+		unstable_cssModules: true,
 		unstable_cssSideEffectImports: true,
 	},
 };

@@ -6,7 +6,7 @@
 	"scripts": {
 		"build": "remix vite:build",
 		"dev": "remix vite:dev",
-		"start": "remix-serve ./build/server/index.js",
+		"start": "node ./build/server/index.js",
 		"vercel-build": "npm run build && cp -R public/* build/client/"
 	},
 	"dependencies": {

@@ -1,23 +1,16 @@
 {
 	"version": 2,
-	"builds": [
-		{
-			"src": "package.json",
-			"use": "@vercel/remix@latest",
-			"config": {
-				"buildCommand": "npm run build",
-				"outputDirectory": "build/client",
-				"serverless": true
-			}
-		}
-	],
+	"buildCommand": "npm run vercel-build",
+	"outputDirectory": "build/client",
 	"routes": [
-		{
-			"handle": "filesystem"
-		},
-		{
-			"src": "/.*",
-			"dest": "build/server/index.js"
+		{ "handle": "filesystem" },
+		{ "src": "/build/(.*)", "dest": "/build/$1" },
+		{ "src": "/assets/(.*)", "dest": "/assets/$1" },
+		{ "src": "/(.*)", "dest": "/server.js" }
+	],
+	"functions": {
+		"server.js": {
+			"runtime": "nodejs18.x"
 		}
-	]
+	}
 }
