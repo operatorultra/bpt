@@ -3,7 +3,22 @@
 	"builds": [
 		{
 			"src": "package.json",
-			"use": "@vercel/remix"
+			"use": "@vercel/remix",
+			"config": {
+				"buildCommand": "remix vite:build",
+				"outputDirectory": "build/client"
+			}
+		}
+	],
+	"routes": [
+		{
+			"src": "/build/(.*)",
+			"dest": "/build/$1"
+		},
+		{
+			"src": "/(.*)",
+			"dest": "/",
+			"status": 200
 		}
 	]
 }
