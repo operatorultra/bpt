@@ -19,6 +19,7 @@ interface ActionData {
 		email?: boolean;
 		message?: boolean;
 		submission?: boolean;
+		phone?: boolean;
 	};
 }
 
@@ -43,11 +44,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	const name = formData.get("name") as string | null;
 	const email = formData.get("email") as string | null;
 	const message = formData.get("message") as string | null;
+	const phone = formData.get("phone") as string | null;
 
 	const errors: ActionData["errors"] = {};
 	if (!name) errors.name = true;
 	if (!email) errors.email = true;
 	if (!message) errors.message = true;
+	if (!phone) errors.phone = true;
 
 	if (Object.keys(errors).length > 0) {
 		return json<ActionData>({ errors });
@@ -55,7 +58,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 	const emailTarget = process.env.EMAIL_TARGET;
 	const subject = `Nieuw formulier bericht van ${name}`;
-	const body = `Naam: ${name}\nEmail: ${email}\nBericht: ${message}`;
+	const body = `Naam: ${name}\nEmail: ${email}\nBericht: ${message}\nTelefoon: ${phone}`;
 
 	try {
 		// Debugging: Log environment variables
@@ -178,17 +181,40 @@ export default function Landing() {
 
 						<div>
 							<label
+								htmlFor="phone"
+								className="block text-sm font-medium text-gray-700 mb-1"
+							>
+								Telefoonnummer
+								<span className="text-red-500">*</span>
+							</label>
+							<input
+								id="phone"
+								name="phone"
+								type="tel"
+								required
+								className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+								placeholder="Het nummer waarop wij u het best kunnen bereiken."
+							/>
+							{actionData?.errors?.phone && (
+								<p className="mt-1 text-sm text-red-600">
+									Telefoonnummer is verplicht
+								</p>
+							)}
+						</div>
+
+						<div>
+							<label
 								htmlFor="message"
 								className="block text-sm font-medium text-gray-700 mb-1"
 							>
-								Bericht <span className="text-red-500">*</span>
+								Bericht
 							</label>
 							<textarea
 								id="message"
 								name="message"
 								rows={4}
 								className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
-								placeholder="Uw bericht"
+								placeholder="Heeft u specifieke vragen of wensen? Plaats die dan hier."
 							/>
 							{actionData?.errors?.message && (
 								<p className="mt-1 text-sm text-red-600">Bericht is verplicht</p>
