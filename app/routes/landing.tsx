@@ -129,9 +129,6 @@ export default function Landing() {
 						alt="Brandpreventietechniek Logo"
 						className="h-24 w-auto"
 					/>
-					<h1 className="mt-6 text-3xl font-bold text-gray-900">
-						Brandpreventietechniek
-					</h1>
 				</header>
 
 				<div className="bg-white rounded-xl shadow-lg p-8">
