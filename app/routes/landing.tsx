@@ -78,6 +78,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 			tls: {
 				rejectUnauthorized: false, // Add this for self-signed certificates
 			},
+			debug: true,
+			logger: true,
 		});
 
 		await transporter.sendMail({
