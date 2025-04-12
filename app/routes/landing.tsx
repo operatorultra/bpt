@@ -4,6 +4,8 @@ import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import * as dotenv from "dotenv";
 import nodemailer from "nodemailer";
 import React from "react";
+import ReviewBadge from "~/components/Reviews";
+import BrandCarousel from "~/components/Carousel";
 
 dotenv.config();
 
@@ -20,6 +22,7 @@ interface ActionData {
 		message?: boolean;
 		submission?: boolean;
 		phone?: boolean;
+		fireExtinguishers?: boolean;
 	};
 }
 
@@ -45,12 +48,14 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	const email = formData.get("email") as string | null;
 	const message = formData.get("message") as string | null;
 	const phone = formData.get("phone") as string | null;
+	const fireExtinguishers = formData.get("fireExtinguishers") as string | null;
 
 	const errors: ActionData["errors"] = {};
 	if (!name) errors.name = true;
-	if (!email) errors.email = true;
+	// if (!email) errors.email = true;
 	if (!message) errors.message = true;
 	if (!phone) errors.phone = true;
+	if (!fireExtinguishers) errors.fireExtinguishers = true;
 
 	if (Object.keys(errors).length > 0) {
 		return json<ActionData>({ errors });
@@ -58,7 +63,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 	const emailTarget = process.env.EMAIL_TARGET;
 	const subject = `Nieuw formulier bericht van ${name}`;
-	const body = `Naam: ${name}\nEmail: ${email}\nBericht: ${message}\nTelefoon: ${phone}`;
+	const body = `Naam: ${name}\nEmail: ${email}\nBericht: ${message}\nTelefoon: ${phone}\nAantal brandblussers: ${fireExtinguishers}`;
 
 	try {
 		// Debugging: Log environment variables
@@ -121,18 +126,27 @@ export default function Landing() {
 			: "Welkom, maak uw bedrijf brandveilig!";
 
 	return (
-		<div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-			<div className="max-w-2xl mx-auto p-6">
-				<header className="flex flex-col items-center mb-10">
-					<img
-						src="https://brandpreventietechniek.nl/wp-content/uploads/2023/10/11-logo-BPT.png"
-						alt="Brandpreventietechniek Logo"
-						className="h-24 w-auto"
-					/>
-				</header>
-
+		<div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex flex-col">
+			<header className="flex flex-col items-start p-4">
+				<img
+					src="https://brandpreventietechniek.nl/wp-content/uploads/2023/10/11-logo-BPT.png"
+					alt="Brandpreventietechniek Logo"
+					className="h-10 w-auto"
+				/>
+			</header>
+			<div className="max-w-2xl mx-auto p-8 flex-grow">
 				<div className="bg-white rounded-xl shadow-lg p-8">
-					<h2 className="text-xl font-semibold text-gray-800 mb-6">{welcomeMessage}</h2>
+					<div className="mb-4">
+						<h3 className="text-black mb-2">
+							Nieuwsgierig wat we voor {company_name ? `${company_name} ` : "jou "}{" "}
+							kunnen betekenen?
+						</h3>
+
+						<p className="text-black text-xs ">
+							Contactformulier voor een vrijblijvend telefonisch overleg.
+						</p>
+					</div>
+
 					<Form method="post" className="space-y-6" ref={formRef}>
 						<div>
 							<label
@@ -148,7 +162,7 @@ export default function Landing() {
 								required
 								defaultValue={name || ""}
 								className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
-								placeholder="Uw naam"
+								placeholder="Vul hier je naam in"
 							/>
 							{actionData?.errors?.name && (
 								<p className="mt-1 text-sm text-red-600">Naam is verplicht</p>
@@ -158,17 +172,16 @@ export default function Landing() {
 						<div>
 							<label
 								htmlFor="email"
-								className="block text-sm font-medium text-gray-700 mb-1"
+								className="hidden text-sm font-medium text-gray-700 mb-1"
 							>
-								Email <span className="text-red-500">*</span>
+								Email
 							</label>
 							<input
 								id="email"
 								name="email"
 								type="email"
-								required
 								defaultValue={email || ""}
-								className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+								className="hidden w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
 								placeholder="Uw email"
 							/>
 							{actionData?.errors?.email && navigation.state !== "idle" && (
@@ -190,7 +203,7 @@ export default function Landing() {
 								type="tel"
 								required
 								className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
-								placeholder="Het nummer waarop wij u het best kunnen bereiken."
+								placeholder="06-nummer waarop je bereikbaar bent"
 							/>
 							{actionData?.errors?.phone && (
 								<p className="mt-1 text-sm text-red-600">
@@ -201,17 +214,39 @@ export default function Landing() {
 
 						<div>
 							<label
+								htmlFor="fireExtinguishers"
+								className="block text-sm font-medium text-gray-700 mb-1"
+							>
+								Aantal brandblussers
+							</label>
+							<input
+								id="fireExtinguishers"
+								name="fireExtinguishers"
+								type="number"
+								min="0"
+								className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+								placeholder="Bijv. 3 stuks"
+							/>
+							{actionData?.errors?.fireExtinguishers && (
+								<p className="mt-1 text-sm text-red-600">
+									Aantal brandblussers is verplicht
+								</p>
+							)}
+						</div>
+
+						<div>
+							<label
 								htmlFor="message"
 								className="block text-sm font-medium text-gray-700 mb-1"
 							>
-								Bericht
+								Vragen of opmerkingen
 							</label>
 							<textarea
 								id="message"
 								name="message"
 								rows={4}
 								className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
-								placeholder="Heeft u specifieke vragen of wensen? Plaats die dan hier."
+								placeholder='Bijv. "We hebben ook een brandslanghaspel"'
 							/>
 							{actionData?.errors?.message && (
 								<p className="mt-1 text-sm text-red-600">Bericht is verplicht</p>
@@ -237,6 +272,10 @@ export default function Landing() {
 						</div>
 					</Form>
 				</div>
+			</div>
+			<div className="p-8">
+				<ReviewBadge />
+				<BrandCarousel />
 			</div>
 		</div>
 	);

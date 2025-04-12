@@ -8,9 +8,6 @@ export default function Success() {
 						alt="Brandpreventietechniek Logo"
 						className="h-24 w-auto"
 					/>
-					<h1 className="mt-6 text-3xl font-bold text-gray-900">
-						Brandpreventietechniek
-					</h1>
 				</header>
 
 				<div className="bg-white rounded-xl shadow-lg p-8 text-center">
@@ -31,23 +28,27 @@ export default function Success() {
 						</svg>
 					</div>
 
-					<h2 className="text-xl font-semibold text-gray-800 mb-2">
-						Bedankt voor uw bericht!
-					</h2>
+					<h2 className="text-xl font-semibold text-gray-800 mb-2">Tot snel!</h2>
 
 					<p className="text-gray-600 mb-6">
-						We hebben uw formulier succesvol ontvangen en nemen zo snel mogelijk contact
-						met u op.
+						We nemen binnen 1 werkdag contact met je op.
 					</p>
 
 					<div className="border-t border-gray-200 pt-6">
 						<p className="text-sm text-gray-500">
-							Heeft u nog vragen? Neem gerust contact met ons op via
+							Heb je nog vragen? Neem gerust contact met ons op via
 							<a
 								href="mailto:info@brandpreventietechniek.nl"
 								className="text-blue-600 hover:text-blue-800 ml-1"
 							>
 								info@brandpreventietechniek.nl
+							</a>
+							<span> of </span>
+							<a
+								className="text-blue-600 hover:text-blue-800 ml-1"
+								href="tel:+31552032293"
+							>
+								+31 55 203 2293
 							</a>
 						</p>
 					</div>
