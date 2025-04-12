@@ -3,7 +3,7 @@ import { json, createCookie } from "@remix-run/node";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import * as dotenv from "dotenv";
 import nodemailer from "nodemailer";
-import React from "react";
+import React, { useState } from "react";
 import ReviewBadge from "~/components/Reviews";
 import BrandCarousel from "~/components/Carousel";
 
@@ -111,13 +111,19 @@ export default function Landing() {
 	const actionData = useActionData<typeof action>();
 	const navigation = useNavigation();
 	const isSubmitting = navigation.state === "submitting";
+	const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
 	const formRef = React.useRef<HTMLFormElement>(null);
 	React.useEffect(() => {
 		if (navigation.state === "idle" && !actionData?.errors) {
 			formRef.current?.reset();
+			setIsButtonDisabled(false);
 		}
 	}, [navigation.state, actionData]);
+
+	const handleSubmit = () => {
+		setIsButtonDisabled(true);
+	};
 
 	// Dynamic welcome message
 	const welcomeMessage =
@@ -134,13 +140,13 @@ export default function Landing() {
 					className="h-10 w-auto"
 				/>
 			</header>
-			<div className="max-w-2xl mx-auto p-8 flex-grow">
+			<div className="max-w-2xl mx-auto p-8 flex-grow" style={{ marginTop: "-40px" }}>
 				<div className="bg-white rounded-xl shadow-lg p-8">
 					<div className="mb-4">
-						<h3 className="text-black mb-2">
+						<h2 className="text-black mb-2 text-lg">
 							Nieuwsgierig wat we voor {company_name ? `${company_name} ` : "jou "}{" "}
 							kunnen betekenen?
-						</h3>
+						</h2>
 
 						<p className="text-black text-xs ">
 							Contactformulier voor een vrijblijvend telefonisch overleg.
@@ -256,10 +262,17 @@ export default function Landing() {
 						<div>
 							<button
 								type="submit"
-								disabled={isSubmitting || actionData?.errors?.submission}
+								disabled={
+									isSubmitting ||
+									isButtonDisabled ||
+									actionData?.errors?.submission
+								}
 								className={`w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
-									isSubmitting ? "opacity-50 cursor-not-allowed" : ""
+									isSubmitting || isButtonDisabled
+										? "opacity-50 cursor-not-allowed"
+										: ""
 								}`}
+								onClick={handleSubmit}
 							>
 								{isSubmitting ? "Verzenden..." : "Verzenden"}
 							</button>
@@ -274,6 +287,11 @@ export default function Landing() {
 				</div>
 			</div>
 			<div className="p-8">
+				<div className="text-center mb-4" style={{ marginTop: "-80px" }}>
+					<p className="text-lg font-semibold text-gray-800">
+						Meer dan 10.000 tevreden klanten gingen je al voor
+					</p>
+				</div>
 				<ReviewBadge />
 				<BrandCarousel />
 			</div>
