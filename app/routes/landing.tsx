@@ -134,11 +134,18 @@ export default function Landing() {
 	return (
 		<div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex flex-col">
 			<header className="flex flex-col items-start p-4">
-				<img
-					src="https://brandpreventietechniek.nl/wp-content/uploads/2023/10/11-logo-BPT.png"
-					alt="Brandpreventietechniek Logo"
-					className="h-10 w-auto"
-				/>
+				<a
+					href="https://brandpreventietechniek.nl"
+					target="_blank"
+					rel="noopener noreferrer"
+					className="text-blue-500 hover:text-blue-700"
+				>
+					<img
+						src="https://brandpreventietechniek.nl/wp-content/uploads/2023/10/11-logo-BPT.png"
+						alt="Brandpreventietechniek Logo"
+						className="h-10 w-auto"
+					/>
+				</a>
 			</header>
 			<div className="max-w-2xl mx-auto p-8 flex-grow" style={{ marginTop: "-40px" }}>
 				<div className="bg-white rounded-xl shadow-lg p-8">
