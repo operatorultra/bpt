@@ -53,9 +53,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	const errors: ActionData["errors"] = {};
 	if (!name) errors.name = true;
 	// if (!email) errors.email = true;
-	if (!message) errors.message = true;
 	if (!phone) errors.phone = true;
-	if (!fireExtinguishers) errors.fireExtinguishers = true;
+	// if (!message) errors.message = true;
+	// if (!fireExtinguishers) errors.fireExtinguishers = true;
 
 	if (Object.keys(errors).length > 0) {
 		return json<ActionData>({ errors });
