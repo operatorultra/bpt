@@ -112,8 +112,8 @@ export default function Landing() {
 	const navigation = useNavigation();
 	const isSubmitting = navigation.state === "submitting";
 	const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-
 	const formRef = React.useRef<HTMLFormElement>(null);
+
 	React.useEffect(() => {
 		if (navigation.state === "idle" && !actionData?.errors) {
 			formRef.current?.reset();
@@ -121,15 +121,15 @@ export default function Landing() {
 		}
 	}, [navigation.state, actionData]);
 
-	const handleSubmit = () => {
-		setIsButtonDisabled(true);
-	};
-
 	// Dynamic welcome message
 	const welcomeMessage =
 		name && company_name
 			? `Welkom, ${name}! Maak ${company_name} brandveilig!`
 			: "Welkom, maak uw bedrijf brandveilig!";
+
+	const Spinner = () => (
+		<div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mx-auto"></div>
+	);
 
 	return (
 		<div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex flex-col">
@@ -160,7 +160,15 @@ export default function Landing() {
 						</p>
 					</div>
 
-					<Form method="post" className="space-y-6" ref={formRef}>
+					<Form
+						method="post"
+						className="space-y-6"
+						ref={formRef}
+						onSubmit={() => {
+							console.log("was clicked");
+							setIsButtonDisabled(true);
+						}}
+					>
 						<div>
 							<label
 								htmlFor="name"
@@ -279,9 +287,8 @@ export default function Landing() {
 										? "opacity-50 cursor-not-allowed"
 										: ""
 								}`}
-								onClick={handleSubmit}
 							>
-								{isSubmitting ? "Verzenden..." : "Verzenden"}
+								{isSubmitting || isButtonDisabled ? <Spinner /> : "Verzenden"}
 							</button>
 							{actionData?.errors?.submission && (
 								<p className="mt-2 text-sm text-red-600">
