@@ -147,7 +147,7 @@ export default function Landing() {
 					/>
 				</a>
 			</header>
-			<div className="max-w-2xl mx-auto p-8 flex-grow" style={{ marginTop: "-0px" }}>
+			<div className="max-w-2xl mx-auto p-8 flex-grow" style={{ marginTop: "40px" }}>
 				<div className="text-center mb-4" style={{ marginTop: "-80px" }}>
 					<p className="text-lg font-semibold text-gray-800">
 						Meer dan 10.000 tevreden klanten gingen je al voor
