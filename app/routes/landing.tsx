@@ -229,7 +229,7 @@ export default function Landing() {
 								type="tel"
 								required
 								className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
-								placeholder="06-nummer waarop je bereikbaar bent"
+								placeholder="Het nummer waarop je bereikbaar bent"
 							/>
 							{actionData?.errors?.phone && (
 								<p className="mt-1 text-sm text-red-600">
