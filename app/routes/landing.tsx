@@ -23,6 +23,7 @@ interface ActionData {
 		submission?: boolean;
 		phone?: boolean;
 		fireExtinguishers?: boolean;
+		address?: boolean;
 	};
 }
 
@@ -49,11 +50,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	const message = formData.get("message") as string | null;
 	const phone = formData.get("phone") as string | null;
 	const fireExtinguishers = formData.get("fireExtinguishers") as string | null;
+	const address = formData.get("address") as string | null;
 
 	const errors: ActionData["errors"] = {};
 	if (!name) errors.name = true;
 	// if (!email) errors.email = true;
 	if (!phone) errors.phone = true;
+	// if (!address) errors.address = true; // Removed address validation
 	// if (!message) errors.message = true;
 	// if (!fireExtinguishers) errors.fireExtinguishers = true;
 
@@ -63,7 +66,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 	const emailTarget = process.env.EMAIL_TARGET;
 	const subject = `Nieuw formulier bericht van ${name}`;
-	const body = `Naam: ${name}\nEmail: ${email}\nBericht: ${message}\nTelefoon: ${phone}\nAantal brandblussers: ${fireExtinguishers}`;
+	const body = `Naam: ${name}\nEmail: ${email}\nBericht: ${message}\nTelefoon: ${phone}\nAantal brandblussers: ${fireExtinguishers}\nAdres: ${address}`;
 
 	try {
 		// Debugging: Log environment variables
@@ -179,7 +182,7 @@ export default function Landing() {
 								htmlFor="name"
 								className="block text-sm font-medium text-gray-700 mb-1"
 							>
-								Naam <span className="text-red-500">*</span>
+								Naam en bedrijfsnaam <span className="text-red-500">*</span>
 							</label>
 							<input
 								id="name"
@@ -188,10 +191,12 @@ export default function Landing() {
 								required
 								defaultValue={name || ""}
 								className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
-								placeholder="Vul hier je naam in"
+								placeholder="Bijv. Jan Jansen - Bouwbedrijf B.V."
 							/>
 							{actionData?.errors?.name && (
-								<p className="mt-1 text-sm text-red-600">Naam is verplicht</p>
+								<p className="mt-1 text-sm text-red-600">
+									Naam en bedrijfsnaam zijn verplicht
+								</p>
 							)}
 						</div>
 
@@ -240,6 +245,25 @@ export default function Landing() {
 
 						<div>
 							<label
+								htmlFor="address"
+								className="block text-sm font-medium text-gray-700 mb-1"
+							>
+								Adres bedrijfspand(en)
+							</label>
+							<input
+								id="address"
+								name="address"
+								type="text"
+								className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+								placeholder="Straatnaam, huisnummer en postcode"
+							/>
+							{actionData?.errors?.address && (
+								<p className="mt-1 text-sm text-red-600">Adres is verplicht</p>
+							)}
+						</div>
+
+						<div>
+							<label
 								htmlFor="fireExtinguishers"
 								className="block text-sm font-medium text-gray-700 mb-1"
 							>
@@ -253,11 +277,6 @@ export default function Landing() {
 								className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
 								placeholder="Bijv. 3 stuks"
 							/>
-							{actionData?.errors?.fireExtinguishers && (
-								<p className="mt-1 text-sm text-red-600">
-									Aantal brandblussers is verplicht
-								</p>
-							)}
 						</div>
 
 						<div>
